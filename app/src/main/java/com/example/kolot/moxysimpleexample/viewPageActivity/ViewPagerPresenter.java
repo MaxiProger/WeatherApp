@@ -13,7 +13,6 @@ import com.example.kolot.moxysimpleexample.networking.WeatherRequest;
 public class ViewPagerPresenter extends MvpPresenter<MainView> implements WeatherRequest.DataInteractor<ResponseWeatherDto> {
     public ViewPagerPresenter() {
         getViewState().showProgress();
-        getViewState().showDefaultIcon();
         getViewState().Gps();
     }
 

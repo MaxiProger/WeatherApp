@@ -17,6 +17,7 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -27,10 +28,10 @@ import com.example.kolot.moxysimpleexample.adapters.MainRVAdapter;
 import com.example.kolot.moxysimpleexample.dto.ResponseWeatherDto;
 import com.example.kolot.moxysimpleexample.networking.GPSTracker;
 
-public class ViewPagerActivity extends AppCompatActivity implements  MainView{
+public class ViewPagerActivity extends AppCompatActivity implements MainView {
 
     private ProgressDialog progressDialog;
-    private TextView textView, clouds, name,temp;
+    private TextView textView, clouds, name, temp;
     private ImageView imageView;
     private ConstraintLayout constraintLayout;
     private SwipeRefreshLayout swipeRefreshLayout;
@@ -42,7 +43,7 @@ public class ViewPagerActivity extends AppCompatActivity implements  MainView{
     @InjectPresenter
     ViewPagerPresenter presenter;
 
-    MvpDelegate<? extends  ViewPagerActivity> mvpDelegate;
+    MvpDelegate<? extends ViewPagerActivity> mvpDelegate;
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
@@ -52,13 +53,11 @@ public class ViewPagerActivity extends AppCompatActivity implements  MainView{
 
         getMvpDelegate().onCreate(savedInstanceState);
 
-        setupWindowAnimations();
-
-        toolbar = (android.support.v7.widget.Toolbar) findViewById(R.id.toolbar);
+        toolbar = (Toolbar) findViewById(R.id.toolbar);
         recyclerView = (RecyclerView) findViewById(R.id.recyclerView);
         swipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipeRefresh);
-        constraintLayout =(ConstraintLayout) findViewById(R.id.constrait);
-        coordinatorLayout =(CoordinatorLayout) findViewById(R.id.main_content);
+        coordinatorLayout = (CoordinatorLayout) findViewById(R.id.main_content);
+        constraintLayout = (ConstraintLayout) findViewById(R.id.constrait);
         textView = (TextView) findViewById(R.id.weather);
         name = (TextView) findViewById(R.id.country_name);
         temp = (TextView) findViewById(R.id.temperature);
@@ -174,34 +173,21 @@ public class ViewPagerActivity extends AppCompatActivity implements  MainView{
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
     public void showWeather(ResponseWeatherDto response) {
-        int idInt = getResources().getIdentifier("drawable/i" +response.getWeather().get(0).getIcon(), null, getPackageName());
+        int idInt = getResources().getIdentifier("drawable/i" + response.getWeather().get(0).getIcon(), null, getPackageName());
         Drawable drawable = getResources().getDrawable(idInt);
         imageView.setImageDrawable(drawable);
 
         if (response.getWeather().get(0).getIcon().contains("n"))
             constraintLayout.setBackgroundResource(R.drawable.night);
-        else if(response.getWeather().get(0).getIcon().contains("d"))
+        else if (response.getWeather().get(0).getIcon().contains("d"))
             constraintLayout.setBackgroundResource(R.drawable.day);
-        toolbar.setTitle("Сейчас: " +response.getWeather().get(0).getDescription() + "\t" +  String.valueOf((int) response.getMain().getTemp()));
-        //textView.setText(forecast.getWeather().get(0).getDescription());
+        toolbar.setTitle("Сейчас: " + response.getWeather().get(0).getDescription() + "\t" + String.valueOf((int) response.getMain().getTemp()));
         temp.setText(String.valueOf((int) response.getMain().getTemp()));
-
-     //   menu_temperature.setTitle(String.valueOf((int) forecast.getMain().getTemp()));
         name.setText(response.getSys().getCountry() + ", " + response.getName());
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
-    private void setupWindowAnimations() {
-        android.transition.Fade fade= new android.transition.Fade();
-        fade.setDuration(1000);
-        getWindow().setEnterTransition(fade);
 
-        android.transition.Slide slide = new android.transition.Slide();
-        slide.setDuration(1000);
-        getWindow().setReturnTransition(slide);
-    }
-
-        @Override
+    @Override
     public void showError(String error) {
         Snackbar.make(coordinatorLayout, error, Snackbar.LENGTH_LONG).show();
     }
@@ -211,13 +197,16 @@ public class ViewPagerActivity extends AppCompatActivity implements  MainView{
         int idInt = getResources().getIdentifier("drawable/na", null, getPackageName());
         Drawable drawable = getResources().getDrawable(idInt);
         imageView.setImageDrawable(drawable);
+        toolbar.setTitle("Погода");
+        temp.setText("");
+        name.setText("");
     }
 
     @Override
     public void Gps() {
         GPSTracker tracker = new GPSTracker(this);
         if (!tracker.canGetLocation()) {
-            return ;
+            return;
         } else {
             presenter.getCoordinates(tracker);
         }

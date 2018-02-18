@@ -11,4 +11,5 @@ public interface ForecastView extends MvpView {
     void getMainIntent();
     void setAdapter(ResponseForecastDto forecastDto);
     void Gps();
+
 }
