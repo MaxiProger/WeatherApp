@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">Погода</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="forecast_for_today">Forecast for today:</string>
+    <string name="no_app_name"> </string>
+    <string name="cardViewday"></string>
+</resources>
