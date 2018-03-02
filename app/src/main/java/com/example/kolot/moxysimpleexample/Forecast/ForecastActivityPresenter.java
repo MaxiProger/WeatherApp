@@ -1,4 +1,4 @@
-package com.example.kolot.moxysimpleexample;
+package com.example.kolot.moxysimpleexample.Forecast;
 
 import com.arellomobile.mvp.InjectViewState;
 import com.arellomobile.mvp.MvpPresenter;

@@ -1,4 +1,4 @@
-package com.example.kolot.moxysimpleexample;
+package com.example.kolot.moxysimpleexample.Forecast;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -10,6 +10,7 @@ import android.widget.TextView;
 
 import com.arellomobile.mvp.MvpDelegate;
 import com.arellomobile.mvp.presenter.InjectPresenter;
+import com.example.kolot.moxysimpleexample.R;
 import com.example.kolot.moxysimpleexample.adapters.RVAdapter;
 import com.example.kolot.moxysimpleexample.dto.ResponseForecastDto;
 import com.example.kolot.moxysimpleexample.networking.GPSTracker;

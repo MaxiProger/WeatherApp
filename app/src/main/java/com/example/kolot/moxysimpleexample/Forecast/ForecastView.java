@@ -1,4 +1,4 @@
-package com.example.kolot.moxysimpleexample;
+package com.example.kolot.moxysimpleexample.Forecast;
 
 import com.arellomobile.mvp.MvpView;
 import com.example.kolot.moxysimpleexample.dto.ResponseForecastDto;
