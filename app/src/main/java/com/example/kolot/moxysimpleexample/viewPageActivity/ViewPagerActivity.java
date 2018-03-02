@@ -1,7 +1,6 @@
 package com.example.kolot.moxysimpleexample.viewPageActivity;
 
 import android.Manifest;
-import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.pm.PackageManager;
 import android.graphics.drawable.Drawable;
@@ -269,32 +268,4 @@ public class ViewPagerActivity extends AppCompatActivity implements MainView, Lo
 
     }
 
-    public void checkPermission() {
-        if (ContextCompat.checkSelfPermission(this,
-                Manifest.permission.INTERNET)
-                != PackageManager.PERMISSION_GRANTED) {
-
-            if (ActivityCompat.shouldShowRequestPermissionRationale((Activity) this,
-                    Manifest.permission.INTERNET)) {
-
-            } else {
-                ActivityCompat.requestPermissions((Activity) this,
-                        new String[]{Manifest.permission.INTERNET}, 1);
-
-            }
-        }
-        if (ContextCompat.checkSelfPermission(this,
-                Manifest.permission.ACCESS_COARSE_LOCATION)
-                != PackageManager.PERMISSION_GRANTED) {
-
-            if (ActivityCompat.shouldShowRequestPermissionRationale((Activity) this,
-                    Manifest.permission.ACCESS_COARSE_LOCATION)) {
-
-            } else {
-                ActivityCompat.requestPermissions((Activity) this,
-                        new String[]{Manifest.permission.ACCESS_COARSE_LOCATION}, 1);
-
-            }
-        }
-    }
 }
