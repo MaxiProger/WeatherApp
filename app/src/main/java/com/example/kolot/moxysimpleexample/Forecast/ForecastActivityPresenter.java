@@ -3,7 +3,6 @@ package com.example.kolot.moxysimpleexample.Forecast;
 import com.arellomobile.mvp.InjectViewState;
 import com.arellomobile.mvp.MvpPresenter;
 import com.example.kolot.moxysimpleexample.dto.ResponseForecastDto;
-import com.example.kolot.moxysimpleexample.networking.GPSTracker;
 import com.example.kolot.moxysimpleexample.networking.WeatherRequest;
 
 /**
@@ -27,10 +26,10 @@ public class ForecastActivityPresenter extends MvpPresenter <ForecastView> imple
 
     }
 
-    public void getCoordinates(GPSTracker tracker) {
+    public void getCoordinates(String lat,String lon) {
         WeatherRequest weatherRequest = new WeatherRequest();
         weatherRequest.setCaller(this);
         weatherRequest.setCaller(this);
-        weatherRequest.getForecast(String.valueOf(tracker.getLatitude()), String.valueOf(tracker.getLongitude()));
+        weatherRequest.getForecast(lat, lon);
     }
 }

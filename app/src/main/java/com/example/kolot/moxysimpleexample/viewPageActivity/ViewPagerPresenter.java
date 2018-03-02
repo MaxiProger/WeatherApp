@@ -3,7 +3,6 @@ package com.example.kolot.moxysimpleexample.viewPageActivity;
 import com.arellomobile.mvp.InjectViewState;
 import com.arellomobile.mvp.MvpPresenter;
 import com.example.kolot.moxysimpleexample.dto.ResponseWeatherDto;
-import com.example.kolot.moxysimpleexample.networking.GPSTracker;
 import com.example.kolot.moxysimpleexample.networking.WeatherRequest;
 
 /**
@@ -16,11 +15,11 @@ public class ViewPagerPresenter extends MvpPresenter<MainView> implements Weathe
         getViewState().Gps();
     }
 
-    public void getCoordinates(GPSTracker tracker) {
+    public void getCoordinates(String lat, String lon) {
         WeatherRequest weatherRequest = new WeatherRequest();
         weatherRequest.setCaller(this);
         weatherRequest.setCaller(this);
-        weatherRequest.getWeather(String.valueOf(tracker.getLatitude()), String.valueOf(tracker.getLongitude()));
+        weatherRequest.getWeather(lat, lon);
     }
 
     @Override

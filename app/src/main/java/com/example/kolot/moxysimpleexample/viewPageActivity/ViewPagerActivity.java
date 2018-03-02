@@ -1,9 +1,13 @@
 package com.example.kolot.moxysimpleexample.viewPageActivity;
 
 import android.Manifest;
+import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.pm.PackageManager;
 import android.graphics.drawable.Drawable;
+import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.PersistableBundle;
@@ -18,6 +22,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -26,9 +31,9 @@ import com.arellomobile.mvp.presenter.InjectPresenter;
 import com.example.kolot.moxysimpleexample.R;
 import com.example.kolot.moxysimpleexample.adapters.MainRVAdapter;
 import com.example.kolot.moxysimpleexample.dto.ResponseWeatherDto;
-import com.example.kolot.moxysimpleexample.networking.GPSTracker;
+import com.example.kolot.moxysimpleexample.networking.MyTracker;
 
-public class ViewPagerActivity extends AppCompatActivity implements MainView {
+public class ViewPagerActivity extends AppCompatActivity implements MainView, LocationListener {
 
     private ProgressDialog progressDialog;
     private TextView textView, clouds, name, temp;
@@ -38,6 +43,8 @@ public class ViewPagerActivity extends AppCompatActivity implements MainView {
     private RecyclerView recyclerView;
     private android.support.v7.widget.Toolbar toolbar;
     private CoordinatorLayout coordinatorLayout;
+    private LocationManager locationManager;
+
 
     private MainRVAdapter adapter;
     @InjectPresenter
@@ -62,6 +69,7 @@ public class ViewPagerActivity extends AppCompatActivity implements MainView {
         name = (TextView) findViewById(R.id.country_name);
         temp = (TextView) findViewById(R.id.temperature);
         imageView = (ImageView) findViewById(R.id.image);
+        locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
 
         progressDialog = new ProgressDialog(this);
         progressDialog.setTitle("Loading");
@@ -107,6 +115,19 @@ public class ViewPagerActivity extends AppCompatActivity implements MainView {
 
             }
         }
+        if (ContextCompat.checkSelfPermission(this,
+                Manifest.permission.ACCESS_COARSE_LOCATION)
+                != PackageManager.PERMISSION_GRANTED) {
+
+            if (ActivityCompat.shouldShowRequestPermissionRationale(this,
+                    Manifest.permission.ACCESS_COARSE_LOCATION)) {
+
+            } else {
+                ActivityCompat.requestPermissions(this,
+                        new String[]{Manifest.permission.ACCESS_COARSE_LOCATION}, 1);
+
+            }
+        }
     }
 
 
@@ -143,6 +164,9 @@ public class ViewPagerActivity extends AppCompatActivity implements MainView {
         if (isFinishing()) {
             getMvpDelegate().onDestroy();
         }
+
+        if(locationManager != null)
+            locationManager.removeUpdates(this);
     }
 
     @Override
@@ -204,13 +228,19 @@ public class ViewPagerActivity extends AppCompatActivity implements MainView {
 
     @Override
     public void Gps() {
-        GPSTracker tracker = new GPSTracker(this);
-        if (!tracker.canGetLocation()) {
-            return;
+
+        MyTracker myTracker = new MyTracker(this);
+        if (myTracker.checkEnabled()) {
+            String[] coord = myTracker.getLocation().split("/");
+            presenter.getCoordinates(coord[0], coord[1]);
         } else {
-            presenter.getCoordinates(tracker);
+            Log.e("provider:", "unabled");
+            Snackbar.make(coordinatorLayout, "Can't get coordinates", Snackbar.LENGTH_LONG).show();
+            hideProgress();
         }
     }
+
+
 
     @Override
     public void onRefresh() {
@@ -219,4 +249,52 @@ public class ViewPagerActivity extends AppCompatActivity implements MainView {
         swipeRefreshLayout.setRefreshing(false);
     }
 
+    @Override
+    public void onLocationChanged(Location location) {
+
+    }
+
+    @Override
+    public void onStatusChanged(String s, int i, Bundle bundle) {
+
+    }
+
+    @Override
+    public void onProviderEnabled(String s) {
+
+    }
+
+    @Override
+    public void onProviderDisabled(String s) {
+
+    }
+
+    public void checkPermission() {
+        if (ContextCompat.checkSelfPermission(this,
+                Manifest.permission.INTERNET)
+                != PackageManager.PERMISSION_GRANTED) {
+
+            if (ActivityCompat.shouldShowRequestPermissionRationale((Activity) this,
+                    Manifest.permission.INTERNET)) {
+
+            } else {
+                ActivityCompat.requestPermissions((Activity) this,
+                        new String[]{Manifest.permission.INTERNET}, 1);
+
+            }
+        }
+        if (ContextCompat.checkSelfPermission(this,
+                Manifest.permission.ACCESS_COARSE_LOCATION)
+                != PackageManager.PERMISSION_GRANTED) {
+
+            if (ActivityCompat.shouldShowRequestPermissionRationale((Activity) this,
+                    Manifest.permission.ACCESS_COARSE_LOCATION)) {
+
+            } else {
+                ActivityCompat.requestPermissions((Activity) this,
+                        new String[]{Manifest.permission.ACCESS_COARSE_LOCATION}, 1);
+
+            }
+        }
+    }
 }
